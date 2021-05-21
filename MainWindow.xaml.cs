@@ -17,9 +17,7 @@ using System.Windows.Shapes;
 
 namespace PYPrime_GUI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public class PYPrime
     {
         public static string Exec(string Value)
@@ -60,9 +58,19 @@ namespace PYPrime_GUI
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
+
         {
-            float Mean = ScoresList.Average();
-            MessageBox.Show($"Average completion Time: { Math.Round(Mean, 3).ToString()} s");
+            try
+            {
+                float Mean = ScoresList.Average();
+                MessageBox.Show($"Average completion Time: { Math.Round(Mean, 3).ToString()} s");
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show("No Results!");
+
+            }
+            
         }
     }
 }
