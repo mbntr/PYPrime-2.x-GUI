@@ -8,10 +8,20 @@
         ResizeMode="NoResize"
         Title="MainWindow" Height="420" Width="315">
     <Grid>
-        <Label Content="PYPrime 2.0 2B GUI Beta, Build 210522" HorizontalAlignment="Left" VerticalAlignment="Top" Width="215"/>
+        <Label Content="PYPrime 2.0 2B GUI Beta, Build 210522" FontSize="15" FontFamily="Arial" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="280" Height="34"/>
         <Button Content="Run" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="80" Click="Button_Click"/>
-        <ListBox Margin="10,49,107,35" RenderTransformOrigin="0.514,0.517" Name="Scores"/>
-        <Button Content="Mean" HorizontalAlignment="Right" Margin="0,0,95,10" VerticalAlignment="Bottom" RenderTransformOrigin="1.137,0.508" Width="60" Click="Button_Click_1"/>
+        <ListBox Margin="10,34,107,60" RenderTransformOrigin="0.514,0.517" Name="Scores"/>
+        <Button Content="Mean" HorizontalAlignment="Right" Margin="0,0,100,10" VerticalAlignment="Bottom" RenderTransformOrigin="1.137,0.508" Width="60" Click="Button_Click_1"/>
+        <ProgressBar Height="22" Margin="10,325,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Name="Progress">
+            <ProgressBar.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.332"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </ProgressBar.RenderTransform>
+        </ProgressBar>
     </Grid>
 
 

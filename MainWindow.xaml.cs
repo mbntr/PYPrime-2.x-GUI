@@ -23,6 +23,7 @@ namespace PYPrime_GUI
         List<float> ScoresList = new List<float>();
         int RunNum = 1;
         string Prime = "2048000000";
+        bool IsRunning = false;
 
         public void Exec(string Value, List<float>ScoresList)
         {
@@ -33,20 +34,38 @@ namespace PYPrime_GUI
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
+            IsRunning = !IsRunning;
             process.Start();
+
+            this.Dispatcher.Invoke(() =>
+            {
+                Progress.IsIndeterminate = true;
+            });
 
             string output = process.StandardOutput.ReadToEnd();       
             float Score = float.Parse(output.Split()[1]);
-            this.Dispatcher.Invoke(() =>
-            {
-                Scores.Items.Add($"Run completed in: {Score} s");
-            });
+            
 
-            // Scores.Items.Add($"Run completed in: {Score} s");
-            ScoresList.Add(Score);
+            if (int.Parse(output.Split()[0]) != 2047999957)
+            {
+                MessageBox.Show("Output Invalid!");
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    Scores.Items.Add($"Run completed in: {Score} s");
+                });
+
+                ScoresList.Add(Score);
+            }
 
             process.WaitForExit();
-
+            IsRunning = !IsRunning;
+            this.Dispatcher.Invoke(() =>
+            {
+                Progress.IsIndeterminate = false;
+            });
         }
 
         public MainWindow()
@@ -57,12 +76,17 @@ namespace PYPrime_GUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (IsRunning == false)
+            {
+                Thread thread = new Thread(() => Exec(Prime, ScoresList));               
+                thread.Start();
+            }
+            else
+            {
+                MessageBox.Show("Thread Already running!");
+            }
 
-            Thread thread = new Thread(() => Exec(Prime, ScoresList));
-            thread.Start();
 
-
-            // Exec(Prime, ScoresList);
             RunNum = RunNum + 1;
         }
 
