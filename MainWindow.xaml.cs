@@ -18,14 +18,15 @@ using System.Windows.Shapes;
 namespace PYPrime_GUI
 {
 
-    public partial class MainWindow : Window    
+    public partial class MainWindow    
     {
+
         List<float> ScoresList = new List<float>();
         int RunNum = 1;
         string Prime = "2048000000";
         bool IsRunning = false;
 
-        public void Exec(string Value, List<float>ScoresList)
+        public async void Exec(string Value, List<float>ScoresList)
         {
 
             Process process = new Process();
@@ -54,7 +55,7 @@ namespace PYPrime_GUI
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    Scores.Items.Add($"Run completed in: {Score} s");
+                    Scores.Items.Add($"Run {RunNum} completed in: {Score} s");
                 });
 
                 ScoresList.Add(Score);
@@ -71,16 +72,21 @@ namespace PYPrime_GUI
         public MainWindow()
         {
             InitializeComponent();
+            SourceChord.FluentWPF.ResourceDictionaryEx.GlobalTheme = SourceChord.FluentWPF.ElementTheme.Light;
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
             if (IsRunning == false)
             {
-                Thread thread = new Thread(() => Exec(Prime, ScoresList));               
-                thread.Start();
-            }
+                // Thread thread = new Thread(() => Exec(Prime, ScoresList));               
+                // thread.Start();
+
+                // void Exec(Prime, ScoresList);
+                await Task.Factory.StartNew(() => Exec(Prime, ScoresList));
+
+            }   
             else
             {
                 MessageBox.Show("Thread Already running!");
