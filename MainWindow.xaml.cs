@@ -18,10 +18,15 @@ using System.Windows.Shapes;
 namespace PYPrime_GUI
 {
 
-    public class PYPrime
+    public partial class MainWindow : Window    
     {
-        public static string Exec(string Value)
+        List<float> ScoresList = new List<float>();
+        int RunNum = 1;
+        string Prime = "2048000000";
+
+        public void Exec(string Value, List<float>ScoresList)
         {
+
             Process process = new Process();
             process.StartInfo.FileName = "PYPrime_Workload.exe";
             process.StartInfo.Arguments = Value;
@@ -29,18 +34,20 @@ namespace PYPrime_GUI
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.Start();
-            string output = process.StandardOutput.ReadToEnd();
+
+            string output = process.StandardOutput.ReadToEnd();       
+            float Score = float.Parse(output.Split()[1]);
+            this.Dispatcher.Invoke(() =>
+            {
+                Scores.Items.Add($"Run completed in: {Score} s");
+            });
+
+            // Scores.Items.Add($"Run completed in: {Score} s");
+            ScoresList.Add(Score);
+
             process.WaitForExit();
-            return output;
 
         }
-    }
-
-    public partial class MainWindow : Window    
-    {
-        List<float> ScoresList = new List<float>();
-        int RunNum = 1;
-        string Prime = "2048000000";
 
         public MainWindow()
         {
@@ -50,10 +57,12 @@ namespace PYPrime_GUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            float Score = float.Parse(PYPrime.Exec(Prime).Split()[1]);
 
-            Scores.Items.Add($"Run {RunNum} completed in: {Score} s");
-            ScoresList.Add(Score);
+            Thread thread = new Thread(() => Exec(Prime, ScoresList));
+            thread.Start();
+
+
+            // Exec(Prime, ScoresList);
             RunNum = RunNum + 1;
         }
 
