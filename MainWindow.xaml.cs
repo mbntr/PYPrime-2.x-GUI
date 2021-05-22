@@ -84,7 +84,18 @@ namespace PYPrime_GUI
                 // thread.Start();
 
                 // void Exec(Prime, ScoresList);
-                await Task.Factory.StartNew(() => Exec(Prime, ScoresList));
+                if (Loop.IsChecked == true)
+                {
+                    while (Loop.IsChecked == true)
+                    {
+                        await Task.Factory.StartNew(() => Exec(Prime, ScoresList));
+                    }
+                }
+                else
+                {
+                    await Task.Factory.StartNew(() => Exec(Prime, ScoresList));
+                }
+                
 
             }   
             else
