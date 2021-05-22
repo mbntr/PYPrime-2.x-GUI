@@ -24,10 +24,18 @@ namespace PYPrime_GUI
         List<float> ScoresList = new List<float>();
         int RunNum = 1;
         string Prime = "2048000000";
+        string StressPrime = "32768000000";
+        long ExpValB = 2047999957;
+        long ExpValS = 32767999997;
         bool IsRunning = false;
 
-        public async void Exec(string Value, List<float>ScoresList)
+        async Task Exec(string Value, List<float> ScoresList, long ExpVal)
+
         {
+            this.Dispatcher.Invoke(() =>
+            {
+                Progress.IsIndeterminate = true;
+            });
 
             Process process = new Process();
             process.StartInfo.FileName = "PYPrime_Workload.exe";
@@ -37,17 +45,13 @@ namespace PYPrime_GUI
             process.StartInfo.RedirectStandardOutput = true;
             IsRunning = !IsRunning;
             process.Start();
-
-            this.Dispatcher.Invoke(() =>
-            {
-                Progress.IsIndeterminate = true;
-            });
+            process.WaitForExit();
 
             string output = process.StandardOutput.ReadToEnd();       
             float Score = float.Parse(output.Split()[1]);
             
 
-            if (int.Parse(output.Split()[0]) != 2047999957)
+            if (int.Parse(output.Split()[0]) != ExpVal)
             {
                 MessageBox.Show("Output Invalid!");
             }
@@ -61,12 +65,13 @@ namespace PYPrime_GUI
                 ScoresList.Add(Score);
             }
 
-            process.WaitForExit();
+            
             IsRunning = !IsRunning;
             this.Dispatcher.Invoke(() =>
             {
                 Progress.IsIndeterminate = false;
             });
+
         }
 
         public MainWindow()
@@ -76,38 +81,44 @@ namespace PYPrime_GUI
         }
 
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void Start_Click(object sender, RoutedEventArgs e)
         {
+
             if (IsRunning == false)
             {
-                // Thread thread = new Thread(() => Exec(Prime, ScoresList));               
-                // thread.Start();
-
-                // void Exec(Prime, ScoresList);
+                RunNum++;
                 if (Loop.IsChecked == true)
                 {
                     while (Loop.IsChecked == true)
                     {
-                        await Task.Factory.StartNew(() => Exec(Prime, ScoresList));
+                        await Task.Factory.StartNew(() => Exec(Prime, ScoresList, ExpValB));
                     }
                 }
-                else
+                else if (Stress.IsChecked == true)
                 {
-                    await Task.Factory.StartNew(() => Exec(Prime, ScoresList));
+                    Loop.IsChecked = true;
+                    while (Loop.IsChecked == true)
+                    {
+                        await Task.Factory.StartNew(() => Exec(StressPrime, ScoresList, ExpValS));
+                    }
                 }
-                
 
-            }   
+                else
+                {                 
+                    await Task.Factory.StartNew(() => Exec(Prime, ScoresList, ExpValB));                  
+                }
+
+
+            }
+
             else
             {
                 MessageBox.Show("Thread Already running!");
             }
 
-
-            RunNum = RunNum + 1;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        void Mean_Click(object sender, RoutedEventArgs e)
 
         {
             try
@@ -118,9 +129,18 @@ namespace PYPrime_GUI
             catch (InvalidOperationException)
             {
                 MessageBox.Show("No Results!");
-
             }
-            
+           
         }
-    }
+
+        private void Window_Closing(object sender, EventArgs e)
+        {
+            foreach (var process in Process.GetProcessesByName("PYPrime_Workload"))
+            {
+                process.Kill();
+            }
+        }        
+
+    }   
+
 }
