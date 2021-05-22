@@ -30,5 +30,6 @@
         </ProgressBar>
         <CheckBox Content="Loop&#xD;&#xA;&#xD;&#xA;" HorizontalAlignment="Left" Margin="215,299,0,0" VerticalAlignment="Top" Name="Loop" Height="15" RenderTransformOrigin="0.428,1.003"/>
         <CheckBox Content="Stress&#xD;&#xA;" HorizontalAlignment="Left" Name="Stress" Margin="215,279,0,0" VerticalAlignment="Top" Height="15"/>
+        <CheckBox Content="Performance Mode" HorizontalAlignment="Left" Margin="10,0,0,12" VerticalAlignment="Bottom" Name="PerfMode"/>
     </Grid>
 </fw:AcrylicWindow>

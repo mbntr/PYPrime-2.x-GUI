@@ -32,11 +32,6 @@ namespace PYPrime_GUI
         async Task Exec(string Value, List<float> ScoresList, long ExpVal)
 
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                Progress.IsIndeterminate = true;
-            });
-
             Process process = new Process();
             process.StartInfo.FileName = "PYPrime_Workload.exe";
             process.StartInfo.Arguments = Value;
@@ -91,6 +86,16 @@ namespace PYPrime_GUI
                 {
                     while (Loop.IsChecked == true)
                     {
+                        if (PerfMode.IsChecked == false)
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                Progress.IsIndeterminate = true;
+                            });
+                        }
+
+                        else
+                        { }
                         await Task.Factory.StartNew(() => Exec(Prime, ScoresList, ExpValB));
                     }
                 }
@@ -99,12 +104,32 @@ namespace PYPrime_GUI
                     Loop.IsChecked = true;
                     while (Loop.IsChecked == true)
                     {
+                        if (PerfMode.IsChecked == false)
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                Progress.IsIndeterminate = true;
+                            });
+                        }
+
+                        else
+                        { }
                         await Task.Factory.StartNew(() => Exec(StressPrime, ScoresList, ExpValS));
                     }
                 }
 
                 else
-                {                 
+                {
+                    if (PerfMode.IsChecked == false)
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            Progress.IsIndeterminate = true;
+                        });
+                    }
+
+                    else
+                    { }
                     await Task.Factory.StartNew(() => Exec(Prime, ScoresList, ExpValB));                  
                 }
 
