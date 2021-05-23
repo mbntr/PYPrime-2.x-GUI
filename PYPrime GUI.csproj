@@ -6,6 +6,12 @@
     <RootNamespace>PYPrime_GUI</RootNamespace>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
+    <StartupObject>PYPrime_GUI.App</StartupObject>
+    <Version>2.0.0</Version>
+    <Authors>Monabuntur</Authors>
+    <Company></Company>
+    <Product />
+    <Description>Open Source python based memory benchmark</Description>
   </PropertyGroup>
 
   <ItemGroup>

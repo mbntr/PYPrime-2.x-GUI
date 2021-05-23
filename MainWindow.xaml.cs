@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
+using System.Windows.Input; 
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -22,7 +22,7 @@ namespace PYPrime_GUI
     {
 
         List<float> ScoresList = new List<float>();
-        int RunNum = 1;
+        int RunNum = 0;
         string Prime = "2048000000";
         string StressPrime = "32768000000";
         long ExpValB = 2047999957;
@@ -33,7 +33,7 @@ namespace PYPrime_GUI
 
         {
             Process process = new Process();
-            process.StartInfo.FileName = "PYPrime_Workload.exe";
+            process.StartInfo.FileName = "python-3.9.5-embed-amd64/PYPrime_Workload.exe";
             process.StartInfo.Arguments = Value;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
